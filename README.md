@@ -3,36 +3,8 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: Constraint propagation is the concept of using limitations to reduce the number of choices we have, in the case of the naked twin problem we know that since there are two boxes with the same value, only those squares are able to contain them. Using this limitation we are able to reduce the number of other choices by removing those numbers from the remaining boxes that exist in their units.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
-
-### Install
-
-This project requires **Python 3**.
-
-We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
-Please try using the environment we provided in the Anaconda lesson of the Nanodegree.
-
-##### Optional: Pygame
-
-Optionally, you can also install pygame if you want to see your visualization. If you've followed our instructions for setting up our conda environment, you should be all set.
-
-If not, please see how to download pygame [here](http://www.pygame.org/download.shtml).
-
-### Code
-
-* `solutions.py` - You'll fill this in as part of your solution.
-* `solution_test.py` - Do not modify this. You can test your solution by running `python solution_test.py`.
-* `PySudoku.py` - Do not modify this. This is code for visualizing your solution.
-* `visualize.py` - Do not modify this. This is code for visualizing your solution.
-
-### Visualizing
-
-To visualize your solution, please only assign values to the values_dict using the ```assign_values``` function provided in solution.py
-
-### Data
-
-The data consists of a text file of diagonal sudokus for you to solve.
+A: Constraint propagation is a little bit different in the case of diagonal units since each box belongs to different row and column than every other box in the diagonal. Fundamentally though it follows the same restrictions as any other unit in Sudoku (only one value between 1-9 for each box in any given unit). Given this I added the diagonal boxes to our unit list so it would check for our existing constraints (elimination, only choice and naked twins) in the diagonals just like the other units. Since diagonals provide another source of information for our search through the units, it helps expedite the speed at which we're able to solve the puzzle as it increases the knowledge of a box as the number of peers for a box are increased (horizontal, vertical, 3x3 grid, and diagonal).
