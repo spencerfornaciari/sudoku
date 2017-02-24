@@ -6,17 +6,12 @@ def cross(A, B):
     "Cross product of elements in A and elements in B."
     return [s+t for s in A for t in B]
 
-# Creating all the boxes
 boxes = cross(rows,cols)
-# Creating all the row units
 row_units = [cross(r, cols) for r in rows]
-# Creating all the column units
+
 column_units = [cross(rows, c) for c in cols]
-# Creating all the square units
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-# Creating allt he diagonal units
 diagonal_units = [[(rows[i]+cols[i]) for i in range(0, len(rows))], [(rows[8-i] + cols[i]) for i in range(0, len(rows))]]
-# Creating a list of all the units
 unitlist = row_units + column_units + square_units + diagonal_units
 
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
@@ -34,12 +29,11 @@ def assign_value(values, box, value):
 
 def naked_twins(values):
     """
-    sEliminate values using the naked twins strategy.
+    Eliminate values using the naked twins strategy.
     Args:
-        values(dict): a dictionary of the form {'box_name': '123456789', ...}
-
+        values(dict): The sudoku in dictionary form
     Returns:
-        the values dictionary with the naked twins eliminated from peers.
+        values(dict): The resulting sudoku in dictionary form.
     """
     # Create a dictionary to contain the twin pairs
     twin_dict = {}
@@ -168,7 +162,7 @@ def search(values):
     Args:
         values(dict): A sudoku in dictionary form.
     Returns:
-        The values dictionary containing a solved sudoku or False if sudoku could not be solved
+        The values dictionary containing a solved sudoku or False if it failed
     """
     values = reduce_puzzle(values)
     if values is False:
