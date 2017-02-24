@@ -31,13 +31,15 @@ def naked_twins(values):
     """
     Eliminate values using the naked twins strategy.
     Args:
-        values(dict): The sudoku in dictionary form
+        values(dict): sudoku in dictionary form
     Returns:
-        values(dict): The resulting sudoku in dictionary form.
+        values(dict): resulting sudoku in dictionary form.
     """
-    # Create a dictionary to contain the twin pairs
-    twin_dict = {}
+    # Create an array of tuples (value, unit) that contain the twin pairs
+    tuple_array = []
+
     for unit in unitlist:
+
         # Create for boxes that have two items in length
         value_dict = {}
 
@@ -50,23 +52,24 @@ def naked_twins(values):
                     value_dict[values[box]] = [box]
                 else:
                     value_dict[values[box]].append(box)
+        # print(value_dict)
 
         # Iterate through boxes with 2 nunmbers inside of them
         for key in value_dict:
             
             # Check if any two of the boxes with share the same values
             if len(value_dict[key]) == 2:
-                if key not in twin_dict:
-                    twin_dict[key] = [unit]
-                else:
-                    twin_dict[key].append(unit)
+                tuple_array.append((key, unit))
 
     # Remove numbers in naked twins from the peers
-    for key in twin_dict:
-        for unit in twin_dict[key]:
-            for box in unit:
-                if values[box] != key:
+    for tup in tuple_array:
+        key = tup[0]
+        unit = tup[1]
+
+        for box in unit:
+            if values[box] != key:
                     assign_value(values, box, values[box].replace(key[0], '').replace(key[1], ''))
+
     return values
 
 def grid_values(grid):
@@ -105,9 +108,9 @@ def eliminate(values):
     """
     Remove the solved boxes value from its peers
     Args:
-        values(dict): A sudoku in dictionary form.
+        values(dict): sudoku in dictionary form.
     Returns:
-        values(dict): The resulting sudoku in dictionary form.
+        values(dict): resulting sudoku in dictionary form.
     """
     solved_values = [box for box in values.keys() if len(values[box]) == 1]
     for box in solved_values:
@@ -135,13 +138,10 @@ def reduce_puzzle(values):
     """ 
     Iterate eliminate(), naked_twins() and only_choice() to eliminate uncertain boxes
 
-    If the sudoku is solved, return the sudoku.
-    Otherwise, if a box with no available values, return False.
-
     Args:
-        values(dict): A sudoku in dictionary form.
+        values(dict): sudoku in dictionary form.
     Returns:
-        values(dict): The resulting sudoku in dictionary form.
+        values(dict): resulting sudoku in dictionary form.
     """
     solved_values = [box for box in values.keys() if len(values[box]) == 1]
     stalled = False
@@ -160,9 +160,9 @@ def search(values):
     """
     Using depth-first search and constraint propagation, try all possible values.
     Args:
-        values(dict): A sudoku in dictionary form.
+        values(dict): sudoku in dictionary form.
     Returns:
-        The values dictionary containing a solved sudoku or False if it failed
+        resulting sudoku in dictionary form if successful, otherwise return False
     """
     values = reduce_puzzle(values)
     if values is False:
@@ -185,7 +185,7 @@ def solve(grid):
         grid(string): a string representing a sudoku grid.
             Example: '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     Returns:
-        The dictionary representation of the final sudoku grid. False if no solution exists.
+        resulting sudoku in dictionary form if successful, otherwise return False
     """
     values = grid_values(grid)
     values = search(values)
