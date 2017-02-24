@@ -1,3 +1,5 @@
+from collections import Counter
+
 assignments = []
 rows = 'ABCDEFGHI'
 cols = '123456789'
@@ -35,30 +37,25 @@ def naked_twins(values):
     Returns:
         values(dict): resulting sudoku in dictionary form.
     """
+    # Create a list of potential twins
+    potential_twins = [box for box in values.keys() if len(values[box]) == 2]
+
     # Create an array of tuples (value, unit) that contain the twin pairs
     tuple_array = []
 
     for unit in unitlist:
 
-        # Create for boxes that have two items in length
-        value_dict = {}
+        # Create a Counter for boxes that have two items in length
+        item_count = Counter()
 
         # Search through boxes in each unit
         for box in unit:
-
-            # Find boxes with 2 values, add them to the value dictionary
-            if len(values[box]) == 2:
-                if values[box] not in value_dict:
-                    value_dict[values[box]] = [box]
-                else:
-                    value_dict[values[box]].append(box)
-        # print(value_dict)
+            if box in potential_twins:
+                item_count[values[box]] += 1
 
         # Iterate through boxes with 2 nunmbers inside of them
-        for key in value_dict:
-            
-            # Check if any two of the boxes with share the same values
-            if len(value_dict[key]) == 2:
+        for key in item_count.keys():
+            if item_count[key] == 2:
                 tuple_array.append((key, unit))
 
     # Remove numbers in naked twins from the peers
